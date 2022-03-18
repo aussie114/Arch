@@ -46,18 +46,66 @@
 # Install the system #
 ######################
 
- pacstrap /mnt base linux linux-firmware base-devel vim
+ pacstrap /mnt base linux linux-firmware base-devel vim amd-ucode
 
-########################
-# 
-########################
+##################
+# Generate fstab #
+##################
 
+ First check the output of genfstab
+ 	genfstab -U /mnt
+ If looks correct commit
+ 	genfstab -U /mnt >> /mnt/etc/fstab
 
+####################
+# Enter the system #
+####################
 
+	arch-chroot /mnt
 
+####################
+# Set localisation #
+####################
 
+ Set localization
+ 	ln -sf /usr/share/zoneinfo/Australia/Brisbane
+	hwclock --systohc
 
+ open /etc/locale.gen and uncomment "en_AU.UTF-8 UTF-8" and then rerun locale-gen
+ 	locale-gen
+ 
+ Create /etc/locale.conf and add the line "LANG=en_AU.UTF-8"
 
+###############
+# Set network #
+###############
 
+ set host name
+ Open /etc/hostname and add line andromeda
 
+ Create a new Initramfs
+ 	mkinitcpio -P
 
+#####################
+# Set root password #
+#####################
+
+	passwd
+
+#######################
+# Install boot loader #
+#######################
+
+ install depends
+	pacman -Sy grub efibootmgr
+ run grub installer
+	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+ generate a configureation file
+ 	grub-mkconfig -o /boot/grub/grub.cfg
+
+##############################
+# Exit and reboot the system #
+##############################
+
+	exit
+	shutdown -r now
