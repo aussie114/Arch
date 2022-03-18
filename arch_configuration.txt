@@ -1,0 +1,44 @@
+##############
+# Networking #
+##############
+
+ Start and enable network service
+	systemctl start systemd-networkd
+	systemctl start systemd-resolved
+
+ list devices
+	networkctl list
+
+ Create a network file and add device
+	vim /etc/systemd/network/20-wired.network
+
+ Add:
+	[Match]
+	Name=usb0
+
+	[Network]
+	DHCP=yes
+
+	systemctl restart systemd-networkd
+	systemctl restart systemd-resolved
+
+	systemctl enable systemd-networkd
+	systemctl enable systemd-resolved
+
+###############
+# Create user #
+###############
+
+	useradd -g users -G wheel,storage,power -m headlesschook
+	passwd headlesschook
+
+ Allow user to sudo
+	visudo
+	uncomment "%wheel ALL=(ALL) ALL"
+
+##############################
+# install desktop enviroment #
+##############################
+
+	pacman -S xorg xfce4 xfce4-goodies lightdm lightdm-gtk-greeter
+	systemctl enable lightdm

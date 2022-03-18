@@ -1,0 +1,63 @@
+##################
+# Check internet #
+##################
+
+	ping google.com
+
+####################
+# Set system clock #
+####################
+
+	timedatectl set-ntp true
+
+######################
+# Drive partitioning #
+######################
+
+ use cgdisk to create partitions and mkfs to format them
+
+ 	cgdisk /dev/nvme0n1
+
+ create bootable partition of 512M with hex code of ef00(EFI) named boot
+ create a partition with the remainder of disk with hex code 8300(Linux file System) named arch
+
+ use mkfs to create file systems
+
+ for boot partition
+	mkfs.fat -F32 /dev/nvme0n1p1
+
+ for main partition
+ 	mkfs.ext4 /dev/nvme0n1p2
+
+####################
+# mount partitions #
+####################
+
+ use mount to mount partitions
+
+ mount main partion to /mnt on USB drive
+	mount /dev/nvme0n1p2 /mnt
+
+ mount boot partition inside main partition
+	mkdir -p /mnt/boot
+	mount /dev/nvme0n1p1 /mnt/boot
+
+######################
+# Install the system #
+######################
+
+ pacstrap /mnt base linux linux-firmware base-devel vim
+
+########################
+# 
+########################
+
+
+
+
+
+
+
+
+
+
