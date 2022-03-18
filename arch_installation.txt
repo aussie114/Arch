@@ -68,7 +68,7 @@
 ####################
 
  Set localization
- 	ln -sf /usr/share/zoneinfo/Australia/Brisbane
+ 	ln -sf /usr/share/zoneinfo/Australia/Brisbane /etc/localtime
 	hwclock --systohc
 
  open /etc/locale.gen and uncomment "en_AU.UTF-8 UTF-8" and then rerun locale-gen
